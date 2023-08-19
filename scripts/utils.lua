@@ -1,0 +1,1 @@
+sx, sy = guiGetScreenSize()
