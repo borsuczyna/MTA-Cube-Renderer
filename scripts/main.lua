@@ -35,7 +35,6 @@ function renderCubeRenderer()
     elseif settings.debugRender == 5 then
         dxDrawImage(0, 0, sx, sy, buffers.emmisives)
     elseif settings.debugRender == 6 then
-        dxDrawImage(0, 0, sx, sy, shaders.skybox)
         dxDrawImage(0, 0, sx, sy, buffers.skybox)
     end
 

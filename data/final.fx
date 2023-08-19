@@ -362,7 +362,6 @@ PixelType2 PixelShaderFunctionShadow(PSInput PS)
         
         float depthDif = max(0, linDepth.x - pixDist.x - fShadowDepthCompare);
         depthDif = min(LDotN, depthDif);
-        float inverseDepthDif = min(LDotN + 0.2, depthDif);
 
         Output.World = 0;
         Output.Color = float4(depthDif, camDist, 0, 1);
@@ -445,11 +444,12 @@ PixelType1 PixelShaderFunctionAO(PSInput PS)
     res = pow(abs(res), 1.0 / AO_BLUR_GAMMA);
 	
     float Color = tex2D(SamplerColor, PS.TexCoord.xy).x;
+    float inverseDot = tex2D(SamplerColor, PS.TexCoord.xy).z;
     float AOLevel = res;
-    float isInShadow = 1-Color*2;
+    inverseDot = saturate(1  - 1.7 * res) * inverseDot;
     res = saturate(1  - 1.7 * res) * Color;
 	
-    Output.Color = float4(res, isInShadow, AOLevel, 1);
+    Output.Color = float4(res, inverseDot, AOLevel, 1);
     Output.World = 0;
     return Output;
 }
@@ -505,8 +505,9 @@ PixelType1 PixelShaderFunctionBlur1(PSInput PS)
         }
     }
 
+    float inverseDot = tex2D(SamplerColor, PS.TexCoord.xy).y;
     float AOLevel = tex2D(SamplerColor, PS.TexCoord.xy).z;
-    Output.Color = float4(AO / centerweight, 1, AOLevel, 1);
+    Output.Color = float4(AO / centerweight, inverseDot, AOLevel, 1);
     Output.World = float4(0, 0, 0, 0.01);
 
     return Output;
@@ -572,7 +573,9 @@ PixelType3 PixelShaderFunctionBlur2(PSInput PS)
 
     float AOLevel = tex2D(SamplerColor, PS.TexCoord.xy).z;
     float isInShadow = .9;
-    Output.Shadows = float4(1, AOLevel, GI*FogAmount, 1);
+    float inverseDot = tex2D(SamplerColor, PS.TexCoord.xy).y;
+    Output.Shadows = float4(inverseDot, AOLevel, GI*FogAmount, 1);
+    // Output.Shadows = float4(inverseDot, 0, 0, 1);
     // Output.World = lerp(float4(0, 0, 0, 1), float4(1, AOLevel, isInShadow, 1), GI*FogAmount);
     Output.World = float4(0, 0, 0, 0.01);
 	return Output;

@@ -77,6 +77,7 @@ float4 PixelShaderFunction(PSInput PS) : COLOR0
     albedoColor.rgb = lerp(albedoColor.rgb * ambientColor, albedoColor.rgb * fLightColor.rgb, 1-isInShadow);
 
     albedoColor.rgb = lerp(albedoColor.rgb, skyboxColor.rgb, 1-albedoColor.a);
+    // albedoColor.rgb = lerp(albedoColor.rgb, albedoColor.rgb * 0.4, shadowColor.r);
     albedoColor.a = 1;
     
     // add fog

@@ -1,9 +1,12 @@
+#define GENERATE_NORMALS
 #include "data/include/mta-helper.fx"
 ::Includes::
 
 texture sAlbedo < string renderTarget = "yes"; >;
 texture sDepth < string renderTarget = "yes"; >;
 texture sEmmisives < string renderTarget = "yes"; >;
+
+float3 sLightDir = float3(0.5, -0.5, 0.5);
 
 ::Variables::
 
@@ -32,6 +35,7 @@ struct VSInput
     float3 Position : POSITION0;
     float4 Diffuse : COLOR0;
     float2 TexCoord : TEXCOORD0;
+    float3 Normal : NORMAL0;
 };
 
 struct PSInput
@@ -40,6 +44,7 @@ struct PSInput
     float4 Diffuse : COLOR0;
     float2 TexCoord : TEXCOORD0;
     float3 WorldPos : TEXCOORD1;
+    float3 Normal : TEXCOORD2;
 };
 
 PSInput VertexShaderFunction(VSInput VS)
@@ -54,6 +59,7 @@ PSInput VertexShaderFunction(VSInput VS)
     PS.TexCoord = VS.TexCoord;
     PS.Diffuse = MTACalcGTABuildingDiffuse(VS.Diffuse);
     PS.WorldPos = worldPos.xyz;
+    PS.Normal = mul(VS.Normal, (float3x3)gWorld);
 
     return PS;
 }
@@ -86,6 +92,9 @@ Pixel PixelShaderFunction(PSInput PS)
     float4 emmisive = float4(0, 0, 0, Output.Albedo.a > 0.78 ? Output.Albedo.a : 0);
     ::Emmisive::
     Output.Emissive = emmisive;
+
+    float inverseDot = pow(dot(sLightDir, PS.Normal), 2);
+    Output.Albedo.rgb *= lerp(1, 0.6, inverseDot) * (1-emmisive);
 
     return Output;
 }

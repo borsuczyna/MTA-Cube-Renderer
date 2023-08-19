@@ -76,6 +76,7 @@ function createShader(path)
     dxSetShaderValue(shader.world, 'sAlbedo', buffers.albedo)
     dxSetShaderValue(shader.world, 'sDepth', buffers.screenDepth)
     dxSetShaderValue(shader.world, 'sEmmisives', buffers.emmisives)
+    dxSetShaderValue(shader.world, 'sLightDir', settings.shadowsDirection)
 
     shader.apply = function(self, texture, element)
         for _,shader in pairs(self.shadows) do
