@@ -94,7 +94,7 @@ Pixel PixelShaderFunction(PSInput PS)
     Output.Emissive = emmisive;
 
     float inverseDot = pow(dot(sLightDir, PS.Normal), 2);
-    Output.Albedo.rgb *= lerp(1, 0.6, inverseDot) * (1-emmisive);
+    Output.Albedo.rgb *= lerp(1, 0.6, inverseDot * (1-emmisive));
 
     return Output;
 }
