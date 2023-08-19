@@ -15,7 +15,7 @@ bool isTreeLog = false;
 
 ::WorldPosition(float3 worldPos)
 float time = Time%%10000;
-float2 windPosition = time * fWindSpeed * float2(fWindDirection.x, -fWindDirection.y) + worldPos.xy / 10;
+float2 windPosition = time * fWindSpeed * float2(-fWindDirection.x, -fWindDirection.y) + worldPos.xy / 10;
 float2 windPositionSmall = time * 5 * max(1, fWindSpeed/3) * float2(fWindDirection.x, -fWindDirection.y) + worldPos.xy * 5;
 float noise = perlinNoise(windPosition * fWindNoiseSize);
 float noiseSmall = perlinNoise(windPositionSmall * fWindNoiseSize);

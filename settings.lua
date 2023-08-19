@@ -6,8 +6,8 @@ settings = {
     sunSize = 500,
 
     windStrength = 3,
-    windSpeed = 3,
-    windDirection = {1, 0},
+    windSpeed = 2,
+    windDirection = {1, -1},
     windNoiseSize = 0.5,
     
     godRaysEnabled = true,

@@ -28,7 +28,8 @@
     <file src='data/effects/emmisive.fx'/>
     <file src='data/effects/generic.fx'/>
 
-    <file src='data/skybox/default.jpg'/>
+    <file src='data/skybox/1.jpg'/>
+    <file src='data/skybox/2.jpg'/>
 
     <min_mta_version server='1.5.7-9.20744' client='1.5.7-9.20744'/>
 </meta>

@@ -63,7 +63,8 @@ function initCubeRenderer()
     createFinalShadowShader()
     createPostShader()
     createEmmisiveShaders()
-    shaders.skybox = createSkybox()
+    createSkybox()
+    setSkyTexture(1, 'data/skybox/1.jpg')
 
     if settings.windShadersEnabled then createWindShaders() end
     if settings.godRaysEnabled then shaders.godrays = createGodRays() end

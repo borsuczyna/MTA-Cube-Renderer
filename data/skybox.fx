@@ -1,6 +1,8 @@
 #include "data/include/mta-helper.fx"
 
-texture sSkyTexture;
+texture sSkyTextureA;
+texture sSkyTextureB;
+float sSkyInterpolation = 0.0f;
 texture sSkyTarget < string renderTarget = "yes"; >;
 
 struct VSInput {
@@ -17,8 +19,17 @@ struct PSInput {
     float4 TexCoord1 : TEXCOORD1;
 };
 
-sampler inputSampler = sampler_state {
-    Texture = (sSkyTexture);
+sampler skySamplerA = sampler_state {
+    Texture = (sSkyTextureA);
+    MinFilter = Linear;
+    MagFilter = Linear;
+    MipFilter = None;
+    AddressU = Clamp;
+    AddressV = Clamp;
+};
+
+sampler skySamplerB = sampler_state {
+    Texture = (sSkyTextureB);
     MinFilter = Linear;
     MagFilter = Linear;
     MipFilter = None;
@@ -86,7 +97,9 @@ Pixel PixelShaderFunction(PSInput PS) {
     float3 worldPos = mul(float4(viewPos, 1), sViewInverse).xyz;
     float3 viewDir = normalize(worldPos - sViewInverse[3].xyz);
     float2 texCoord = getReflectionCoords(-viewDir.xzy, float2(1, 1));
-    float4 inputTexel = tex2D(inputSampler, texCoord);	
+    float4 inputTexelA = tex2D(skySamplerA, texCoord);	
+    float4 inputTexelB = tex2D(skySamplerB, texCoord);	
+    float4 inputTexel = lerp(inputTexelA, inputTexelB, sSkyInterpolation);
     float4 worldColor = inputTexel*PS.Diffuse;
 
     Output.Color = float4(0, 0, 0, 0.01);
