@@ -34,6 +34,9 @@ function renderCubeRenderer()
         dxDrawImage(0, 0, sx, sy, buffers.screenDepth)
     elseif settings.debugRender == 5 then
         dxDrawImage(0, 0, sx, sy, buffers.emmisives)
+    elseif settings.debugRender == 6 then
+        dxDrawImage(0, 0, sx, sy, shaders.skybox)
+        dxDrawImage(0, 0, sx, sy, buffers.skybox)
     end
 
     dxDrawText('Cube Renderer Alpha @borsuczyna', 1, 1, sx + 1, sy - 1, 0xAA000000, 1.5, 'default-bold', 'center', 'bottom')
@@ -45,6 +48,7 @@ end
 function updateCubeRenderer()
     updateCamera()
     updateBuffers()
+    updateDayCycle()
 
     fps[1] = fps[1] + 1
 end
@@ -54,10 +58,13 @@ function initCubeRenderer()
     
     shaders.main = createShader()
     shaders.main:defaultApply()
+    shaders.generic = createShader('data/effects/generic.fx')
+    shaders.generic:apply('vehiclegeneric256')
     
     createFinalShadowShader()
     createPostShader()
     createEmmisiveShaders()
+    shaders.skybox = createSkybox()
 
     if settings.windShadersEnabled then createWindShaders() end
     if settings.godRaysEnabled then shaders.godrays = createGodRays() end

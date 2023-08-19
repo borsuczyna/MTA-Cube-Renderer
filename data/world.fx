@@ -83,14 +83,14 @@ Pixel PixelShaderFunction(PSInput PS)
 
     float depth = distance(gCameraPosition, PS.WorldPos) / 1000;
     Output.Depth = float4(depth, depth, depth, Output.Albedo.a);
-    float4 emmisive = float4(0, 0, 0, 0);
+    float4 emmisive = float4(0, 0, 0, Output.Albedo.a > 0.78 ? Output.Albedo.a : 0);
     ::Emmisive::
     Output.Emissive = emmisive;
 
     return Output;
 }
 
-technique shaded_world_fast
+technique cube_world_fast
 {
     pass P0
     {

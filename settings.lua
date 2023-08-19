@@ -3,7 +3,7 @@ settings = {
     shadowsDirection = Vector3(-0.45, -0.277, -0.34):getNormalized(),
     viewRadius = 150,
 
-    sunSize = 300,
+    sunSize = 500,
 
     windStrength = 3,
     windSpeed = 3,
@@ -13,5 +13,5 @@ settings = {
     godRaysEnabled = true,
     windShadersEnabled = true,
 
-    debugRender = 0,
+    debugRender = 3,
 }

@@ -95,7 +95,7 @@ float4 PixelShaderGodrays(PSInput PS) : COLOR0 {
     return finalColor * PS.Diffuse;
 }
 
-technique shaded_godrays
+technique cube_godrays
 {
     pass P0
     {

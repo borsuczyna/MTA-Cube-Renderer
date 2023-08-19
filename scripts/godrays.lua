@@ -9,8 +9,7 @@ function createGodRays()
 end
 
 function updateGodRays()
-    local camMat = getCameraMatrix()
-    local centerPos = Vector3(getElementPosition(getCamera()))
+    local centerPos = Vector3(getCameraMatrix())
     local sunWorldPos = centerPos - settings.shadowsDirection * 5
     local sunScreenX, sunScreenY = getScreenFromWorldPosition(sunWorldPos.x, sunWorldPos.y, sunWorldPos.z, settings.sunSize/2)
     if sunScreenX and sunScreenY then
