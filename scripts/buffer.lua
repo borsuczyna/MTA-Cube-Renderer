@@ -20,6 +20,7 @@ function updateBuffers()
     dxSetRenderTarget(buffers.shadows, true)
     dxSetRenderTarget(buffers.normal, true)
     dxSetRenderTarget(buffers.screenDepth, true)
+    dxSetRenderTarget(buffers.emmisives, true)
     if settings.godRaysEnabled then dxSetRenderTarget(buffers.godrays, true) end
     dxSetRenderTarget()
 
@@ -33,6 +34,7 @@ function initBuffers()
     buffers.normal = dxCreateRenderTarget(sx, sy, false)
     buffers.skybox = dxCreateRenderTarget(sx, sy, false)
     buffers.screenDepth = dxCreateRenderTarget(sx, sy, true)
+    buffers.emmisives = dxCreateRenderTarget(sx, sy, false)
     if settings.godRaysEnabled then buffers.godrays = dxCreateRenderTarget(sx, sy, true) end
 end
 

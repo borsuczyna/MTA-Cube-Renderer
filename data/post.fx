@@ -4,6 +4,7 @@ texture sAlbedo;
 texture sShadows;
 texture sSkybox;
 texture sDepth;
+texture sEmmisives;
 
 float4 fAmbientColor = float4(0.3, 0.3, 0.3, 1.0);
 float4 fLightColor = float4(1.05, 0.95, 0.85, 1.0);
@@ -28,6 +29,10 @@ sampler SkyboxSampler = sampler_state {
 
 sampler DepthSampler = sampler_state {
     Texture = (sDepth);
+};
+
+sampler EmmisivesSampler = sampler_state {
+    Texture = (sEmmisives);
 };
 
 struct VSInput
@@ -60,11 +65,13 @@ float4 PixelShaderFunction(PSInput PS) : COLOR0
     float4 albedoColor = tex2D(AlbedoSampler, PS.TexCoord);
     float4 shadowColor = tex2D(ShadowSampler, PS.TexCoord);
     float4 skyboxColor = tex2D(SkyboxSampler, PS.TexCoord);
+    float emmisivesColor = tex2D(EmmisivesSampler, PS.TexCoord).r;
     float depth = tex2D(DepthSampler, PS.TexCoord).r;
     
     float AOLevel = shadowColor.g;
     float isInShadow = shadowColor.b;
-
+    isInShadow *= (1-emmisivesColor);
+    
     float4 AOColor = lerp(fAOColor, fAOShadowColor, isInShadow);
     float4 ambientColor = lerp(fAmbientColor, AOColor, AOLevel);
     albedoColor.rgb = lerp(albedoColor.rgb * ambientColor, albedoColor.rgb * fLightColor.rgb, 1-isInShadow);

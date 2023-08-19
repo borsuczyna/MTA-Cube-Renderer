@@ -3,6 +3,7 @@
 
 texture sAlbedo < string renderTarget = "yes"; >;
 texture sDepth < string renderTarget = "yes"; >;
+texture sEmmisives < string renderTarget = "yes"; >;
 
 ::Variables::
 
@@ -12,8 +13,8 @@ sampler Sampler0 = sampler_state
     MinFilter = Linear;
     MagFilter = Linear;
     MipFilter = Linear;
-    MaxMipLevel = 0;
-    MipMapLodBias = 0;
+    MaxMipLevel = 0.5;
+    MipMapLodBias = -2;
 };
 
 sampler AlbedoSampler = sampler_state
@@ -62,6 +63,7 @@ struct Pixel
     float4 World : COLOR0;
     float4 Albedo : COLOR1;
     float4 Depth : COLOR2;
+    float4 Emissive : COLOR3;
 };
 
 Pixel PixelShaderFunction(PSInput PS)
@@ -69,7 +71,8 @@ Pixel PixelShaderFunction(PSInput PS)
     Pixel Output;
     float4 texel = tex2D(Sampler0, PS.TexCoord);
     texel.a *= PS.Diffuse.a;
-    texel *= gMaterialDiffuse * gGlobalAmbient;
+    texel *= gMaterialDiffuse * gGlobalAmbient + gMaterialAmbient;
+    ::PixelShader::
 
     float4 albedo = tex2D(AlbedoSampler, PS.TexCoord);
 
@@ -80,6 +83,9 @@ Pixel PixelShaderFunction(PSInput PS)
 
     float depth = distance(gCameraPosition, PS.WorldPos) / 1000;
     Output.Depth = float4(depth, depth, depth, Output.Albedo.a);
+    float4 emmisive = float4(0, 0, 0, 0);
+    ::Emmisive::
+    Output.Emissive = emmisive;
 
     return Output;
 }

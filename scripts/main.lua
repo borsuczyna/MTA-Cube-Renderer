@@ -32,6 +32,8 @@ function renderCubeRenderer()
         dxDrawImage(0, 0, sx, sy, buffers.shadows)
     elseif settings.debugRender == 4 then
         dxDrawImage(0, 0, sx, sy, buffers.screenDepth)
+    elseif settings.debugRender == 5 then
+        dxDrawImage(0, 0, sx, sy, buffers.emmisives)
     end
 
     dxDrawText('Cube Renderer Alpha @borsuczyna', 1, 1, sx + 1, sy - 1, 0xAA000000, 1.5, 'default-bold', 'center', 'bottom')
@@ -55,8 +57,11 @@ function initCubeRenderer()
     
     createFinalShadowShader()
     createPostShader()
+    createEmmisiveShaders()
+
     if settings.windShadersEnabled then createWindShaders() end
     if settings.godRaysEnabled then shaders.godrays = createGodRays() end
+    
     shaders.post = getPostShader()
     
     addEventHandler('onClientPreRender', root, updateCubeRenderer, true, 'high+1')

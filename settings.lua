@@ -5,8 +5,8 @@ settings = {
 
     sunSize = 300,
 
-    windStrength = 2,
-    windSpeed = 1,
+    windStrength = 3,
+    windSpeed = 3,
     windDirection = {1, 0},
     windNoiseSize = 0.5,
     

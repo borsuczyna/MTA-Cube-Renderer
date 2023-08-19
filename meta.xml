@@ -9,6 +9,7 @@
     <script src='scripts/update.lua' type='client' cache='false'/>
     <script src='scripts/wind.lua' type='client' cache='false'/>
     <script src='scripts/godrays.lua' type='client' cache='false'/>
+    <script src='scripts/emmisive.lua' type='client' cache='false'/>
     <script src='scripts/main.lua' type='client' cache='false'/>
 
     <file src='data/include/mta-helper.fx'/>
@@ -22,6 +23,8 @@
     <file src='data/godrays.fx'/>
 
     <file src='data/effects/wind.fx'/>
+    <file src='data/effects/emmisive.fx'/>
+    <file src='data/effects/lights.fx'/>
 
     <min_mta_version server='1.5.7-9.20744' client='1.5.7-9.20744'/>
 </meta>

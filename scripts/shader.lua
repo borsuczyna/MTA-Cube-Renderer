@@ -18,7 +18,9 @@ function compileShader(template, source)
     local keywords = {
         'WorldPosition',
         'Includes',
-        'Variables'
+        'Variables',
+        'PixelShader',
+        'Emmisive',
     }
 
     if source then
@@ -73,6 +75,7 @@ function createShader(path)
 
     dxSetShaderValue(shader.world, 'sAlbedo', buffers.albedo)
     dxSetShaderValue(shader.world, 'sDepth', buffers.screenDepth)
+    dxSetShaderValue(shader.world, 'sEmmisives', buffers.emmisives)
 
     shader.apply = function(self, texture, element)
         for _,shader in pairs(self.shadows) do
@@ -148,6 +151,7 @@ function createPostShader()
     dxSetShaderValue(allShaders.post, 'sShadows', buffers.shadows)
     dxSetShaderValue(allShaders.post, 'sSkybox', buffers.skybox)
     dxSetShaderValue(allShaders.post, 'sDepth', buffers.screenDepth)
+    dxSetShaderValue(allShaders.post, 'sEmmisives', buffers.emmisives)
     dxSetShaderValue(allShaders.post, 'sTexSize', sx, sy)
 end
 

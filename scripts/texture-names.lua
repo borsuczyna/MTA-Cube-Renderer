@@ -13,7 +13,7 @@ textureShadowsRemoveList = {
     '*cloud*',                                                 -- clouds
     '*smoke*',                                                 -- smoke
     'sphere_cj',                                               -- nitro heat haze mask
-    'water*','newaterfal1_256',
+    -- 'water*','newaterfal1_256',
     'boatwake*','splash_up','carsplash_*',
     'fist','*icon','headlight*',
     'unnamed','sphere','plaintarmac*', 'particleskid', 'collisionsmoke',
