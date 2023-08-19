@@ -41,7 +41,6 @@ function updateShadows()
 
     dxDrawMaterialLine3D(centerPos.x + 0.5, centerPos.y, centerPos.z, centerPos.x + 0.5, centerPos.y + 1, centerPos.z,
     final, 1, tocolor(255, 0, 0, 155), centerPos.x + 0.5,centerPos.y + 0.5, centerPos.z + 1)
-    -- dxDrawImage(0,)
 end
 
 function drawShadows()

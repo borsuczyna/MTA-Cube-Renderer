@@ -4,7 +4,7 @@
 
 ::Variables
 float Time;
-float2 fWindDirection = float2(1, 0);
+float2 fWindDirection = float2(1, -1);
 float fWindStrength = 3;
 float fWindSpeed = 2;
 float fWindNoiseSize = 0.5;

@@ -1,4 +1,10 @@
 local shaders = {}
+local fps = {0, 0}
+
+setTimer(function()
+    fps[2] = fps[1] * 4
+    fps[1] = 0
+end, 250, 0)
 
 function getMainShader()
     return shaders.main
@@ -6,7 +12,10 @@ end
 
 function renderCubeRenderer()
     drawShadows()
+    if settings.godRaysEnabled then updateGodRays() end
+
     dxDrawImage(0, 0, sx, sy, shaders.post)
+    if settings.godRaysEnabled then dxDrawImage(0, 0, sx, sy, shaders.godrays) end
 
     if settings.debugRender == 1 then -- draw shadow depth buffers
         local x, y = 0, 0
@@ -27,11 +36,15 @@ function renderCubeRenderer()
 
     dxDrawText('Cube Renderer Alpha @borsuczyna', 1, 1, sx + 1, sy - 1, 0xAA000000, 1.5, 'default-bold', 'center', 'bottom')
     dxDrawText('Cube Renderer Alpha @borsuczyna', 0, 0, sx, sy - 2, white, 1.5, 'default-bold', 'center', 'bottom')
+
+    dxDrawText('fps: ' .. fps[2], 0, 0, sx, sy - 25, white, 1, 'default-bold', 'center', 'bottom')
 end
 
 function updateCubeRenderer()
     updateCamera()
     updateBuffers()
+
+    fps[1] = fps[1] + 1
 end
 
 function initCubeRenderer()
@@ -42,7 +55,8 @@ function initCubeRenderer()
     
     createFinalShadowShader()
     createPostShader()
-    createWindShaders()
+    if settings.windShadersEnabled then createWindShaders() end
+    if settings.godRaysEnabled then shaders.godrays = createGodRays() end
     shaders.post = getPostShader()
     
     addEventHandler('onClientPreRender', root, updateCubeRenderer, true, 'high+1')

@@ -19,6 +19,7 @@ local windTextures = {
     {'wind', 'elm_treegrn2', 0, 15},
     {'wind', 'elmtreered', 0, 30},
     {'wind', 'bzelka1', 0, 15, false, true},
+    {'wind', 'weeelm', 0, 15, false},
     {'wind', 'hazelbrnch', 0, 30},
     {'wind', 'bcorya0', 0, 30, false, true},
     {'wind', 'ashbrnch', 0, 30},
@@ -43,6 +44,7 @@ local windTextures = {
     {'wind', 'sm_des_bush*', 0, 5},
     {'wind', 'sm_josh_leaf', 0, 13},
     {'wind', 'sm_josh_bark', 0, 13},
+    {'wind', 'sw_flag01', 1.5, -2},
 
     -- {'wind', 'txgrass1_1', 0, 10, true},
     -- {'grass', 'txgrass0_1', 0, 10, true},
@@ -66,6 +68,11 @@ function createWindShaders()
         shader:apply(v[2])
         shader:setValue('fTreeZOffset', v[3])
         shader:setValue('fTreeHeight', v[4])
+
+        shader:setValue('fWindStrength', settings.windStrength)
+        shader:setValue('fWindSpeed', settings.windSpeed)
+        shader:setValue('fWindDirection', settings.windDirection)
+        shader:setValue('fWindNoiseSize', settings.windNoiseSize)
 
         if v[5] then
             shader:setShadowCastingEnabled(false)

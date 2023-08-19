@@ -8,6 +8,7 @@
     <script src='scripts/skybox.lua' type='client' cache='false'/>
     <script src='scripts/update.lua' type='client' cache='false'/>
     <script src='scripts/wind.lua' type='client' cache='false'/>
+    <script src='scripts/godrays.lua' type='client' cache='false'/>
     <script src='scripts/main.lua' type='client' cache='false'/>
 
     <file src='data/include/mta-helper.fx'/>
@@ -18,6 +19,7 @@
     <file src='data/world.fx'/>
     <file src='data/final.fx'/>
     <file src='data/post.fx'/>
+    <file src='data/godrays.fx'/>
 
     <file src='data/effects/wind.fx'/>
 

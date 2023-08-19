@@ -45,7 +45,7 @@ texture sRTDepth_1;
 texture sRTDepth_2;
 texture sRTDepth_3;
 texture sRTDepth_4;
-int iShadowPlanes = 4;
+int iShadowPlanes = 3;
 
 texture gDepthBuffer : DEPTHBUFFER;
 float4x4 gProjection : PROJECTION;
@@ -358,6 +358,7 @@ PixelType2 PixelShaderFunctionShadow(PSInput PS)
         else if(IsInShadowProjectionRange(projCoord_2) && iShadowPlanes >= 2) linDepth = ProcessShadowProjection(projCoord_2, SamplerCompare_2, sClip.x, sClip.y);
         else if(IsInShadowProjectionRange(projCoord_3) && iShadowPlanes >= 3) linDepth = ProcessShadowProjection(projCoord_3, SamplerCompare_3, sClip.x, sClip.y);
         else if(IsInShadowProjectionRange(projCoord_4) && iShadowPlanes >= 4) linDepth = ProcessShadowProjection(projCoord_4, SamplerCompare_4, sClip.x, sClip.y);
+        else linDepth = UnitToDist(16777215, sClip.x, sClip.y);
         
         float depthDif = max(0, linDepth.x - pixDist.x - fShadowDepthCompare);
         depthDif = min(LDotN, depthDif);
