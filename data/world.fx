@@ -10,6 +10,10 @@ float3 sLightDir = float3(0.5, -0.5, 0.5);
 
 ::Variables::
 
+// ::loop(i, 1, 5)
+// float3 lightPosition(:i:) = float3(0, 0, 0);
+// ::end
+
 sampler Sampler0 = sampler_state
 {
     Texture = (gTexture0);

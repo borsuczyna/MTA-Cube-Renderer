@@ -1,5 +1,5 @@
 settings = {
-    shadowPlanes = {30, 150},
+    shadowPlanes = {30, 150, 300},
     vehicleShadowPlane = 50,
     shadowsDirection = Vector3(-0.45, 0.277, -0.34):getNormalized(),
     viewRadius = 150,

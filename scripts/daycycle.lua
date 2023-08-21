@@ -3,14 +3,35 @@ local timeCycle = {
     [12] = {
         fogStart = 0.05,
         fogDistance = 0.6,
-        skyboxTexture = '1',
-        skyboxInterpolation = 0,
+        skyboxTextureA = '1',
+        skyboxTextureB = '2',
+        skyboxInterpolationStart = 0,
+        skyboxInterpolationEnd = 1,
+
+        sunDirection = {1, 0.05, -0.8},
+        sunColor = {1, 1, 1, 1},
+        sunSize = 500,
+        godraysAlpha = 1,
+        godRayStartOffset = 0.3,
+        godRayLength = 0.7,
+
+        ambientColor = {0.3, 0.3, 0.3},
+        lightColor = {1.05, 0.95, 0.85},
+        aoColor = {0.3, 0.3, 0.3},
+        aoShadowColor = {0.1, 0.1, 0.1},
     },
     [13] = {
         fogStart = 0.05,
         fogDistance = 0.6,
-        skyboxTexture = '2',
-        skyboxInterpolation = .5,
+        skyboxTextureA = '2',
+        skyboxTextureB = '2',
+        skyboxInterpolationStart = 0,
+        skyboxInterpolationEnd = 1,
+
+        sunDirection = {1, 0.05, -0.2},
+        sunColor = {1, 0.8, 0.6, 1},
+        sunSize = 500,
+        godraysAlpha = 1,
         godRayStartOffset = 0.3,
         godRayLength = 0.7,
 
@@ -55,7 +76,7 @@ local timeCycle = {
         godRayLength = 0.7,
 
         ambientColor = {0.25, 0.17, 0.15},
-        lightColor = {0.85, 0.5, 0.4},
+        lightColor = {0.95, 0.6, 0.45},
         aoColor = {0.3, 0.3, 0.3},
         aoShadowColor = {0.1, 0.1, 0.1},
     },
@@ -98,7 +119,7 @@ function updateDayCycle()
     if not areAllShadersLoaded() then return end
 
     local h,m = getTime()
-    local hour, minute = 21, 0
+    local hour, minute = 12, 0
     local start = timeCycle[hour]
     local finish = timeCycle[hour + 1] or timeCycle[1] or timeCycle[hour]
     local progress = (minute / 60)
