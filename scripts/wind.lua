@@ -3,8 +3,8 @@ local windTextures = {
     -- shader, texture, z offset, height, no shadow casting, is tree log
     {'wind', 'bpinud2', 0, 14, false, true},
     {'wind', 'pinebrnch1', 0, 14},
-    {'wind', 'trunk3', 0, 15},
-    {'wind', 'trunk5', 0, 15},
+    {'wind', 'trunk3', 0, 25},
+    {'wind', 'trunk5', 0, 25, false, true},
     {'wind', 'tree19mi', -15, 100},
     {'wind', 'sm_redwood_branch', -15, 100},
     {'wind', 'sm_pinetreebit', -15, 100},

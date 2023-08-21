@@ -1,5 +1,6 @@
 local shaders = {}
 local fps = {0, 0}
+local dayCycleTimer = nil
 
 setTimer(function()
     fps[2] = fps[1] * 4
@@ -47,7 +48,6 @@ end
 function updateCubeRenderer()
     updateCamera()
     updateBuffers()
-    updateDayCycle()
 
     fps[1] = fps[1] + 1
 end
@@ -55,7 +55,7 @@ end
 function initCubeRenderer()
     initBuffers()
     
-    shaders.main = createShader()
+    shaders.main = createShader(nil, true)
     shaders.main:defaultApply()
     shaders.generic = createShader('data/effects/generic.fx')
     shaders.generic:apply('vehiclegeneric256')
@@ -65,6 +65,9 @@ function initCubeRenderer()
     createEmmisiveShaders()
     createSkybox()
     setSkyTexture(1, 'data/skybox/1.jpg')
+
+    dayCycleTimer = setTimer(updateDayCycle, getMinuteDuration(), 0)
+    updateDayCycle()
 
     if settings.windShadersEnabled then createWindShaders() end
     if settings.godRaysEnabled then shaders.godrays = createGodRays() end
@@ -83,6 +86,8 @@ function destroyCubeRenderer()
     
     destroyShaders()
     destroyBuffers()
+
+    if isTimer(dayCycleTimer) then killTimer(dayCycleTimer) end
 end
 
 addEventHandler('onClientResourceStart', resourceRoot, initCubeRenderer)

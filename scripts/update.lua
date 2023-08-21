@@ -6,18 +6,31 @@ function updateCamera()
     local rtVec = ((centerPos - cameraPos):cross(bottomPos - cameraPos)):getNormalized()
     local upVec =  -(rtVec:cross(fwVec)):getNormalized()
 
-    cameraPos.x = math.floor(cameraPos.x / 5) * 5
-    cameraPos.y = math.floor(cameraPos.y / 5) * 5
-    cameraPos.z = math.floor(cameraPos.z / 5) * 5
+    cameraPos.x = math.floor(cameraPos.x / 2) * 2
+    cameraPos.y = math.floor(cameraPos.y / 2) * 2
+    cameraPos.z = math.floor(cameraPos.z / 2) * 2
 
     local shadowShaders = getAllShadowShaders()
+    local vehicleShadowShaders = getAllVehicleShadowShaders()
     for _,shader in ipairs(shadowShaders.all) do
         dxSetShaderValue(shader, 'sCameraPosition', cameraPos.x, cameraPos.y, cameraPos.z)
         dxSetShaderValue(shader, 'sCameraForward', fwVec.x, fwVec.y, fwVec.z)
         dxSetShaderValue(shader, 'sCameraUp', upVec.x, upVec.y, upVec.z)
     end
 
+    for _,shader in ipairs(vehicleShadowShaders.all) do
+        dxSetShaderValue(shader, 'sCameraPosition', cameraPos.x, cameraPos.y, cameraPos.z)
+        dxSetShaderValue(shader, 'sCameraForward', fwVec.x, fwVec.y, fwVec.z)
+        dxSetShaderValue(shader, 'sCameraUp', upVec.x, upVec.y, upVec.z)
+    end
+
     for index,data in ipairs(shadowShaders) do
+        for _,shader in ipairs(data) do
+            dxSetShaderValue(shader, 'sScrRes', settings.shadowPlanes[index], settings.shadowPlanes[index])
+        end
+    end
+
+    for index,data in ipairs(vehicleShadowShaders) do
         for _,shader in ipairs(data) do
             dxSetShaderValue(shader, 'sScrRes', settings.shadowPlanes[index], settings.shadowPlanes[index])
         end

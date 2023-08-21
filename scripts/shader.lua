@@ -56,7 +56,7 @@ function compileShader(template, source)
     return template
 end
 
-function createShader(path)
+function createShader(path, vehicleShadows)
     local shader = {
         shadows = {},
         world = dxCreateShader(compileShader('data/world.fx', path), 0, 0, false, 'all'),
@@ -66,11 +66,26 @@ function createShader(path)
     for i = 1, #settings.shadowPlanes do
         local distance = settings.shadowPlanes[i]
 
-        local shadowShader = dxCreateShader(compileShader('data/shadow.fx', path), 0, distance + 50, true, 'all')
+        local shadowShader = dxCreateShader(compileShader('data/shadow.fx', path), 0, distance + 50, true, 'world,object,ped,other')
         dxSetShaderValue(shadowShader, 'sClip', .3, 600)
         dxSetShaderValue(shadowShader, 'depthRT', getDepthBuffer(i))
 
         table.insert(shader.shadows, shadowShader)
+    end
+
+    -- vehicle shadows
+    if vehicleShadows then
+        shader.shadows['vehicle'] = {}
+        
+        for i = 1, 2 do
+            local distance = settings.shadowPlanes[i]
+
+            local shadowShader = dxCreateShader(compileShader('data/shadow.fx', path), 0, distance + 50, true, 'vehicle')
+            dxSetShaderValue(shadowShader, 'sClip', .3, 600)
+            dxSetShaderValue(shadowShader, 'depthRT', getDepthBuffer(i))
+
+            table.insert(shader.shadows['vehicle'], shadowShader)
+        end
     end
 
     dxSetShaderValue(shader.world, 'sAlbedo', buffers.albedo)
@@ -79,37 +94,70 @@ function createShader(path)
     dxSetShaderValue(shader.world, 'sLightDir', settings.shadowsDirection)
 
     shader.apply = function(self, texture, element)
-        for _,shader in pairs(self.shadows) do
+        for _,shader in ipairs(self.shadows) do
             engineApplyShaderToWorldTexture(shader, texture, element)
         end
+
+        if self.shadows['vehicle'] then
+            for _,shader in ipairs(self.shadows['vehicle']) do
+                engineApplyShaderToWorldTexture(shader, texture, element)
+            end
+        end
+
         engineApplyShaderToWorldTexture(self.world, texture, element)
     end
     
     shader.defaultApply = function(self)
-        for _,shader in pairs(self.shadows) do
+        for _,shader in ipairs(self.shadows) do
             applyShaderToWorld(shader, false)
         end
+
+        if self.shadows['vehicle'] then
+            for _,shader in ipairs(self.shadows['vehicle']) do
+                applyShaderToWorld(shader, false)
+            end
+        end
+
         applyShaderToWorld(self.world, true)
     end
 
     shader.remove = function(self, texture, element)
-        for _,shader in pairs(self.shadows) do
+        for _,shader in ipairs(self.shadows) do
             engineRemoveShaderFromWorldTexture(shader, texture, element)
         end
+
+        if self.shadows['vehicle'] then
+            for _,shader in ipairs(self.shadows['vehicle']) do
+                engineRemoveShaderFromWorldTexture(shader, texture, element)
+            end
+        end
+
         engineRemoveShaderFromWorldTexture(self.world, texture, element)
     end
 
     shader.setValue = function(self, name, ...)
-        for _,shader in pairs(self.shadows) do
+        for _,shader in ipairs(self.shadows) do
             dxSetShaderValue(shader, name, ...)
+        end
+
+        if self.shadows['vehicle'] then
+            for _,shader in ipairs(self.shadows['vehicle']) do
+                dxSetShaderValue(shader, name, ...)
+            end
         end
 
         dxSetShaderValue(self.world, name, ...)
     end
 
     shader.destroy = function(self)
-        for _,shader in pairs(self.shadows) do
+        for _,shader in ipairs(self.shadows) do
             destroyElement(shader)
+        end
+
+        if self.shadows['vehicle'] then
+            for _,shader in ipairs(self.shadows['vehicle']) do
+                destroyElement(shader)
+            end
         end
 
         for index,shader in pairs(allShaders) do
@@ -170,6 +218,24 @@ function getAllShadowShaders()
             if not shadowShaders[index] then shadowShaders[index] = {} end
             table.insert(shadowShaders[index], shadow)
             table.insert(shadowShaders.all, shadow)
+        end
+    end
+
+    return shadowShaders
+end
+
+function getAllVehicleShadowShaders()
+    local shadowShaders = {
+        all = {}
+    }
+
+    for _,shader in ipairs(allShaders) do
+        if shader.shadows['vehicle'] then
+            for index,shadow in ipairs(shader.shadows['vehicle']) do
+                if not shadowShaders[index] then shadowShaders[index] = {} end
+                table.insert(shadowShaders[index], shadow)
+                table.insert(shadowShaders.all, shadow)
+            end
         end
     end
 

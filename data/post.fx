@@ -13,7 +13,7 @@ float4 fAOShadowColor = float4(0.1, 0.1, 0.1, 1.0);
 
 float4 fFogColor = float4(188.0/255, 225.0/255, 249.0/255, 1.0);
 float fFogStart = 0.05;
-float fFogDistance = 0.4;
+float fFogDistance = 0.6;
 
 sampler AlbedoSampler = sampler_state {
     Texture = (sAlbedo);
@@ -74,7 +74,7 @@ float4 PixelShaderFunction(PSInput PS) : COLOR0
     
     float4 AOColor = lerp(fAOColor, fAOShadowColor, isInShadow);
     float4 ambientColor = lerp(fAmbientColor, AOColor, AOLevel);
-    albedoColor.rgb = lerp(albedoColor.rgb * ambientColor, albedoColor.rgb * fLightColor.rgb, 1-isInShadow);
+    albedoColor.rgb = lerp(albedoColor.rgb * lerp(ambientColor, float3(1, 1, 1), emmisivesColor.r), albedoColor.rgb * lerp(fLightColor.rgb, float3(1, 1, 1), emmisivesColor.r), 1-isInShadow);
 
     albedoColor.rgb = lerp(albedoColor.rgb, skyboxColor.rgb, 1-albedoColor.a);
     // albedoColor.rgb = lerp(albedoColor.rgb, albedoColor.rgb * 0.4, shadowColor.r);
@@ -82,7 +82,8 @@ float4 PixelShaderFunction(PSInput PS) : COLOR0
     
     // add fog
     float fogFactor = saturate((depth - fFogStart) / fFogDistance);
-    albedoColor.rgb = lerp(albedoColor.rgb, fFogColor.rgb, fogFactor);
+    float4 fFogColorNew = skyboxColor.rgba;
+    albedoColor.rgb = lerp(albedoColor.rgb, fFogColorNew.rgb, fogFactor);
 
     return albedoColor;
 }

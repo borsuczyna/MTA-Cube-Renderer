@@ -3,7 +3,8 @@
 float2 sSunPosition;
 float2 sScrRes;
 float fSunSize;
-float3 sSunColor = float3(255/255.0, 255/265.0, 255/275.0);
+float fGodRayAlpha;
+float4 sSunColor = float4(255/255.0, 255/265.0, 255/275.0, 1);
 bool sSunVisible;
 
 float fGodRayStrength = 0.05;
@@ -77,6 +78,8 @@ Pixel PixelShaderFunction(PSInput PS)
     Pixel Out;
     Out.Color = float4(sSunColor.rgb, sunDist);
     Out.Output = float4(sSunColor.rgb, sunDist);
+    Out.Color.a *= sSunColor.a;
+    Out.Output.a *= sSunColor.a;
 
     return Out;
 }
@@ -92,6 +95,7 @@ float4 PixelShaderGodrays(PSInput PS) : COLOR0 {
     }
 
 	finalColor *= fGodRayStrength / (28/(float)iGodRaySamples);
+    finalColor.a *= fGodRayAlpha;
     return finalColor * PS.Diffuse;
 }
 

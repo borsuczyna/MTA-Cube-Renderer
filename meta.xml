@@ -30,6 +30,9 @@
 
     <file src='data/skybox/1.jpg'/>
     <file src='data/skybox/2.jpg'/>
+    <file src='data/skybox/3.jpg'/>
+    <file src='data/skybox/4.jpg'/>
+    <file src='data/skybox/5.jpg'/>
 
     <min_mta_version server='1.5.7-9.20744' client='1.5.7-9.20744'/>
 </meta>

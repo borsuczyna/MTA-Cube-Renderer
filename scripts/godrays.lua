@@ -8,6 +8,10 @@ function createGodRays()
     return shader
 end
 
+function getGodRaysShader()
+    return shader
+end
+
 function updateGodRays()
     local centerPos = Vector3(getCameraMatrix())
     local sunWorldPos = centerPos - settings.shadowsDirection * 5

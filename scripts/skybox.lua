@@ -3,9 +3,6 @@ local skyTextures = {}
 
 function createSkybox()
     shader = dxCreateShader(compileShader('data/skybox.fx'))
-    -- dxSetShaderValue(shader, 'sSkyTextureA', dxCreateTexture('data/skybox/1.jpg'))
-    -- dxSetShaderValue(shader, 'sSkyTextureB', dxCreateTexture('data/skybox/2.jpg'))
-    dxSetShaderValue(shader, 'sSkyInterpolation', 0)
     dxSetShaderValue(shader, 'sSkyTarget', buffers.skybox)
 
     return shader
