@@ -53,8 +53,67 @@ function compileShader(template, source)
         end
     end
 
+    -- variables
+    -- ::variable::
+    local variables = {
+        {'shadowPlanes', #settings.shadowPlanes},
+    }
+
+    for _,variable in pairs(variables) do
+        template = template:gsub('::' .. variable[1] .. '::', variable[2])
+    end
+
+    -- loops
+    -- ::loop(variable, start, stop)
+    -- content (:variable:)
+    -- content (:variable-1:)
+    -- content (:variable+2:)
+    -- ::end
+    local loopStart = template:find('::loop')
+    while loopStart do
+        local loopEnd = template:find('::end', loopStart)
+        if loopEnd then
+            local loopStr = template:sub(loopStart, loopEnd + 4)
+            local lines = split(loopStr, '\n')
+
+            local variable, start, stop = lines[1]:match('::loop%((%w+),%s*(%d+),%s*(%d+)%)')
+            if variable and start and stop then
+                table.remove(lines, 1)
+                table.remove(lines, #lines)
+                local content = table.concat(lines, '\n')
+
+                local finalContent = ''
+                for i = tonumber(start), tonumber(stop) do
+                    finalContent = finalContent .. content:gsub('%(:' .. variable .. ':%)', i) .. '\n'
+
+                    finalContent = finalContent:gsub('%(:' .. variable .. '%-(%d+):%)', function(number)
+                        return i - tonumber(number)
+                    end)
+
+                    finalContent = finalContent:gsub('%(:' .. variable .. '%+(%d+):%)', function(number)
+                        return i + tonumber(number)
+                    end)
+                end
+
+                finalContent = finalContent:sub(1, #finalContent - 1)
+
+                template = template:sub(1, loopStart - 1) .. finalContent .. template:sub(loopEnd + 5)
+            else
+                outputDebugString('Failed to parse loop in ' .. template)
+            end
+        else
+            outputDebugString('Failed to find end of loop in ' .. template)
+        end
+
+        loopStart = template:find('::loop', loopStart + 1)
+    end
+
     return template
 end
+
+-- print(getTickCount())
+-- print(compileShader('data/loops-test.fx'))
+setClipboard(compileShader('data/shadow.fx'))
 
 function createShader(path, vehicleShadows)
     local distance = settings.shadowPlanes[#settings.shadowPlanes]

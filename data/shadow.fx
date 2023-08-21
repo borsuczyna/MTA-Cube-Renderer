@@ -7,9 +7,10 @@ float3 sCameraPosition = float3(0,0,0);
 float3 sCameraForward = float3(0,0,0);
 float3 sCameraUp = float3(0,0,0);
 float2 sClip = float2(0.3,300);
-float2 sScrRes1 = float2(800,600);
-float2 sScrRes2 = float2(800,600);
-float2 sScrRes3 = float2(800,600);
+
+::loop(i, 1, ::shadowPlanes::)
+float2 sScrRes(:i:) = float2(800,600);
+::end
 
 texture depthRT1 < string renderTarget = "yes"; >;
 texture depthRT2 < string renderTarget = "yes"; >;
@@ -23,9 +24,10 @@ sampler2D Sampler0 = sampler_state
     Texture = (gTexture0);
 };
 
-sampler2D SamplerDepth1 = sampler_state
+::loop(i, 1, ::shadowPlanes::)
+sampler2D SamplerDepth(:i:) = sampler_state
 {
-    Texture = (depthRT1);
+    Texture = (depthRT(:i:));
     AddressU = Clamp;
     AddressV = Clamp;
     MinFilter = Point;
@@ -34,30 +36,7 @@ sampler2D SamplerDepth1 = sampler_state
     MaxMipLevel = 0;
     MipMapLodBias = 0;
 };
-
-sampler2D SamplerDepth2 = sampler_state
-{
-    Texture = (depthRT2);
-    AddressU = Clamp;
-    AddressV = Clamp;
-    MinFilter = Point;
-    MagFilter = Point;
-    MipFilter = None;
-    MaxMipLevel = 0;
-    MipMapLodBias = 0;
-};
-
-sampler2D SamplerDepth3 = sampler_state
-{
-    Texture = (depthRT3);
-    AddressU = Clamp;
-    AddressV = Clamp;
-    MinFilter = Point;
-    MagFilter = Point;
-    MipFilter = None;
-    MaxMipLevel = 0;
-    MipMapLodBias = 0;
-};
+::end
 
 struct VSInput
 {
@@ -136,45 +115,26 @@ float4 ProcessShadowMapPS(PSInput PS, sampler2D depthSampler, float2 scrRes) {
     return output;
 }
 
-PSInput VertexShaderFunction_1(VSInput VS) {
-    return ProcessShadowMapVS(VS, sScrRes1);
+::loop(i, 1, ::shadowPlanes::)
+PSInput VertexShaderFunction(:i:)(VSInput VS) {
+    return ProcessShadowMapVS(VS, sScrRes(:i:));
 }
 
-PSInput VertexShaderFunction_2(VSInput VS) {
-    return ProcessShadowMapVS(VS, sScrRes2);
-}
-
-PSInput VertexShaderFunction_3(VSInput VS) {
-    return ProcessShadowMapVS(VS, sScrRes3);
-}
-
-Pixel PixelShaderFunction_1(PSInput PS) {
+Pixel PixelShaderFunction(:i:)(PSInput PS) {
     Pixel output = (Pixel)0;
-    output.Depth1 = ProcessShadowMapPS(PS, SamplerDepth1, sScrRes1);
+    output.Depth(:i:) = ProcessShadowMapPS(PS, SamplerDepth(:i:), sScrRes(:i:));
     
     return output;
 }
-
-Pixel PixelShaderFunction_2(PSInput PS) {
-    Pixel output = (Pixel)0;
-    output.Depth2 = ProcessShadowMapPS(PS, SamplerDepth2, sScrRes2);
-    
-    return output;
-}
-
-Pixel PixelShaderFunction_3(PSInput PS) {
-    Pixel output = (Pixel)0;
-    output.Depth3 = ProcessShadowMapPS(PS, SamplerDepth3, sScrRes3);
-    
-    return output;
-}
+::end
 
 technique cube_shadow
 {
-    pass P0
+    ::loop(i, 1, ::shadowPlanes::)
+    pass P(:i-1:)
     {
-        VertexShader = compile vs_3_0 VertexShaderFunction_1();
-        PixelShader = compile ps_3_0 PixelShaderFunction_1();
+        VertexShader = compile vs_3_0 VertexShaderFunction(:i:)();
+        PixelShader = compile ps_3_0 PixelShaderFunction(:i:)();
 
         AlphaBlendEnable = true;
         AlphaTestEnable = false;
@@ -187,36 +147,5 @@ technique cube_shadow
         DitherEnable = false;
         StencilEnable = false;
     }
-    pass P1
-    {
-        VertexShader = compile vs_3_0 VertexShaderFunction_2();
-        PixelShader = compile ps_3_0 PixelShaderFunction_2();
-
-        AlphaBlendEnable = true;
-        AlphaTestEnable = false;
-        AlphaFunc = GreaterEqual;
-        ShadeMode = Gouraud;
-        ZEnable = false;
-        FogEnable = false;
-        SrcBlend = SrcAlpha;
-        DestBlend = InvSrcAlpha;
-        DitherEnable = false;
-        StencilEnable = false;
-    }
-    pass P2
-    {
-        VertexShader = compile vs_3_0 VertexShaderFunction_3();
-        PixelShader = compile ps_3_0 PixelShaderFunction_3();
-
-        AlphaBlendEnable = true;
-        AlphaTestEnable = false;
-        AlphaFunc = GreaterEqual;
-        ShadeMode = Gouraud;
-        ZEnable = false;
-        FogEnable = false;
-        SrcBlend = SrcAlpha;
-        DestBlend = InvSrcAlpha;
-        DitherEnable = false;
-        StencilEnable = false;
-    }
+    ::end
 }

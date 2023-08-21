@@ -10,19 +10,6 @@ function updateCamera()
     cameraPos.y = math.floor(cameraPos.y / 2) * 2
     cameraPos.z = math.floor(cameraPos.z / 2) * 2
 
-    -- local shadowShaders = getAllShadowShaders()
-    -- for _,shader in ipairs(shadowShaders.all) do
-    --     dxSetShaderValue(shader, 'sCameraPosition', cameraPos.x, cameraPos.y, cameraPos.z)
-    --     dxSetShaderValue(shader, 'sCameraForward', fwVec.x, fwVec.y, fwVec.z)
-    --     dxSetShaderValue(shader, 'sCameraUp', upVec.x, upVec.y, upVec.z)
-    -- end
-
-    -- for index,data in ipairs(shadowShaders) do
-    --     for _,shader in ipairs(data) do
-    --         dxSetShaderValue(shader, 'sScrRes', settings.shadowPlanes[index], settings.shadowPlanes[index])
-    --     end
-    -- end
-
     local shadowShaders = getAllShadowShaders()
     for _,shader in ipairs(shadowShaders) do
         dxSetShaderValue(shader, 'sCameraPosition', cameraPos.x, cameraPos.y, cameraPos.z)
@@ -33,10 +20,6 @@ function updateCamera()
             dxSetShaderValue(shader, 'sScrRes' .. i, settings.shadowPlanes[i], settings.shadowPlanes[i])
         end
     end
-
-    -- dxSetShaderValue(shader, 'sCameraPosition', cameraPos.x, cameraPos.y, cameraPos.z)
-    -- dxSetShaderValue(shader, 'sCameraForward', fwVec.x, fwVec.y, fwVec.z)
-    -- dxSetShaderValue(shader, 'sCameraUp', upVec.x, upVec.y, upVec.z)
 
     local final = getFinalShadowShader()
     dxSetShaderValue(final, 'sCameraPosition', cameraPos.x, cameraPos.y, cameraPos.z)

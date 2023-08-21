@@ -23,6 +23,7 @@
     <file src='data/post.fx'/>
     <file src='data/godrays.fx'/>
     <file src='data/skybox.fx'/>
+    <file src='data/loops-test.fx'/>
 
     <file src='data/effects/wind.fx'/>
     <file src='data/effects/emmisive.fx'/>
