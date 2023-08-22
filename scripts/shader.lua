@@ -112,7 +112,7 @@ function compileShader(template, source)
     return template
 end
 
-setClipboard(compileShader('data/world.fx'))
+-- setClipboard(compileShader('data/world.fx'))
 
 function createShader(path, vehicleShadows)
     local distance = settings.shadowPlanes[#settings.shadowPlanes]

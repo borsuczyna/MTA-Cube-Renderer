@@ -36,17 +36,19 @@ function updateLights()
             priority = priority + dist / 10
             priority = priority - v.size / 10
 
-            local edgeTolerance = math.max(sx/2-dist*20, 20)
+            local edgeTolerance = math.max(sx/2-dist*100*v.size, 20)
             local x, y = getScreenFromWorldPosition(v.position.x, v.position.y, v.position.z + 0.5, edgeTolerance, true)
             if x and y then
-                table.insert(sortedLights, {
-                    position = v.position,
-                    color = v.color,
-                    size = v.size,
-                    spotlightData = v.spotlightData,
-                    priority = priority
-                })
+                priority = priority - 5
             end
+
+            table.insert(sortedLights, {
+                position = v.position,
+                color = v.color,
+                size = v.size,
+                spotlightData = v.spotlightData,
+                priority = priority
+            })
         end
 
         table.sort(sortedLights, function(a, b)
@@ -86,7 +88,7 @@ function updateLights()
     for i = 1, maxLights do
         local v = queuedLights[i]
         if v then
-            mainShader:setValue('lightPosition' .. i, v.position.x, v.position.y, v.position.z)
+            mainShader:setValue('lightPosition' .. i, v.position.x, v.position.y, v.position.z, v.size)
             mainShader:setValue('lightColor' .. i, v.color[1]/255, v.color[2]/255, v.color[3]/255)
 
             if v.spotlightData then

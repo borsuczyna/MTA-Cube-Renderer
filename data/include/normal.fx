@@ -20,8 +20,8 @@ float3 tex2DNormal(sampler textureSampler, float2 texCoord)
     // Calculate the gradient in the height map
     // use heightCenter
     float3 gradient = float3(
-        0.5f + (heightCenter - heightLeft) * normalPower,
-        0.5f + (heightCenter - heightDown) * normalPower,
+        0.5f + max(min((heightCenter - heightLeft) * normalPower, 0.02), -0.03),
+        0.5f + max(min((heightCenter - heightDown) * normalPower, 0.02), -0.03),
         1
     );
 

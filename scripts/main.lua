@@ -45,24 +45,31 @@ function renderCubeRenderer()
     dxDrawText('fps: ' .. fps[2], 0, 0, sx, sy - 25, white, 1, 'default-bold', 'center', 'bottom')
 
     -- debug
-    queueLight({375.16501, -2068.24268, 7.83594}, {855, 0, 0}, 8)
-    queueLight({382.57190, -2065.37402, 7.83594}, {0, 855, 0}, 8, {
-        direction = {math.cos(getTickCount()/400), math.sin(getTickCount()/400), -0.5},
-        theta = 0,
-        phi = 1,
-        falloff = 0.1,
-    })
+    -- queueLight({375.16501, -2068.24268, 7.83594}, {855, 0, 0}, 8)
+    -- queueLight({382.57190, -2065.37402, 7.83594}, {0, 855, 0}, 8, {
+    --     direction = {math.cos(getTickCount()/400), math.sin(getTickCount()/400), -0.5},
+    --     theta = 0,
+    --     phi = 1,
+    --     falloff = 0.1,
+    -- })
 end
 
 function updateCubeRenderer()
     updateCamera()
     updateBuffers()
+
+    if settings.objectLightsEnabled then
+        updateObjectLights()
+    end
+
     updateLights()
 
     fps[1] = fps[1] + 1
 end
 
 function initCubeRenderer()
+    destroyCubeRenderer()
+
     initBuffers()
     
     shaders.main = createShader(nil, true)
@@ -76,7 +83,12 @@ function initCubeRenderer()
     createSkybox()
     setSkyTexture(1, 'data/skybox/1.jpg')
 
+    if settings.replaceDefaultObjects then
+        createReplacedObjects()
+    end
+
     dayCycleTimer = setTimer(updateDayCycle, getMinuteDuration(), 0)
+    dayCycleTimer = setTimer(updateDayCycle, 1000, 1)
     updateDayCycle()
 
     if settings.windShadersEnabled then createWindShaders() end
@@ -104,4 +116,8 @@ addEventHandler('onClientResourceStart', resourceRoot, initCubeRenderer)
 
 addCommandHandler('elo', function()
     destroyCubeRenderer()
+end)
+
+addCommandHandler('elo2', function()
+    initCubeRenderer()
 end)

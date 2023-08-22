@@ -12,6 +12,10 @@
     <script src='scripts/emmisive.lua' type='client' cache='false'/>
     <script src='scripts/daycycle.lua' type='client' cache='false'/>
     <script src='scripts/lights.lua' type='client' cache='false'/>
+    <script src='scripts/objects.lua' type='client' cache='false'/>
+    <script src='scripts/objectLights.lua' type='client' cache='false'/>
+    <script src='scripts/measure.lua' type='client' cache='false'/>
+    <!-- <script src='scripts/test.lua' type='client' cache='false'/> -->
     <script src='scripts/main.lua' type='client' cache='false'/>
 
     <file src='data/include/mta-helper.fx'/>

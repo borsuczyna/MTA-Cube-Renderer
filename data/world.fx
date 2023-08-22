@@ -108,9 +108,10 @@ Pixel PixelShaderFunction(PSInput PS)
     float3 normalTexel = tex2DNormal(Sampler0, PS.TexCoord);
     PS.Normal -= normalTexel - 0.5;
 
-    float3 lightColor = (float3)0;
-    
+    // float3 lightColor = (float3)0;
+    float3 lightColors = (float3)0;
     float lightDistance;
+
     ::loop(i, 1, ::maxLights::)
     if(lightEnabled(:i:)) {
         Output.Albedo.rgb = AffectByLight(
@@ -125,16 +126,15 @@ Pixel PixelShaderFunction(PSInput PS)
             lightPhiThetaFalloff(:i:).x,
             lightPhiThetaFalloff(:i:).y,
             lightPhiThetaFalloff(:i:).z,
-            lightColor
+            lightColors
         );
-
-        lightColor /= 2;
 
         lightDistance = min(distance(PS.WorldPos, lightPosition(:i:).xyz)/lightPosition(:i:).w, 1);
         // Output.Albedo.rgb = lerp(Output.Albedo.rgb, pow(Output.Albedo.rgb, lightColor(:i:).a), 1 - lightDistance);
-        emmisive.rgb = lerp(emmisive.rgb, lightColor, 1 - lightDistance);
+        // emmisive.rgb = lerp(emmisive.rgb, lightColor, 1 - lightDistance);
     }
     ::end
+    emmisive.rgb += lightColors / 2;
 
     Output.Emissive = emmisive;
 

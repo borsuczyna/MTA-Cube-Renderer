@@ -20,7 +20,7 @@ float3 AffectByLight(float3 inColor, float3 worldPos, float3 worldNormal, float3
     fAttenuation *= max(dotProduct, 0);
 
     inColor = lerp(inColor*lightColor, inColor, 1-fAttenuation);
-    color = lerp(lightColor, float3(0, 0, 0), 1-fAttenuation);
+    color = lerp(lightColor, color, 1-fAttenuation);
 
     return inColor;
 }

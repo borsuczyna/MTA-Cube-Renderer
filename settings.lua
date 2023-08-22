@@ -10,11 +10,14 @@ settings = {
     windSpeed = 2,
     windDirection = {1, -1},
     windNoiseSize = 0.5,
-    maxLights = 10,
+    maxLights = 13,
+    objectsLightsRenderDistance = 300,
     
     godRaysEnabled = true,
     windShadersEnabled = true,
-    lightsDebugEnabled = true,
+    lightsDebugEnabled = false,
+    objectLightsEnabled = true,
+    replaceDefaultObjects = true,
 
     debugRender = 0,
 }
