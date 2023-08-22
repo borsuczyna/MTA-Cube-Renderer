@@ -65,7 +65,8 @@ float4 PixelShaderFunction(PSInput PS) : COLOR0
     float4 albedoColor = tex2D(AlbedoSampler, PS.TexCoord);
     float4 shadowColor = tex2D(ShadowSampler, PS.TexCoord);
     float4 skyboxColor = tex2D(SkyboxSampler, PS.TexCoord);
-    float emmisivesColor = tex2D(EmmisivesSampler, PS.TexCoord).r;
+    float3 emmisivesSampled = tex2D(EmmisivesSampler, PS.TexCoord).rgb;
+    float emmisivesColor = min(emmisivesSampled.r + emmisivesSampled.g + emmisivesSampled.b, 1.0);
     float depth = tex2D(DepthSampler, PS.TexCoord).r;
     
     float AOLevel = shadowColor.g;

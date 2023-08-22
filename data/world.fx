@@ -1,5 +1,7 @@
 #define GENERATE_NORMALS
 #include "data/include/mta-helper.fx"
+#include "data/include/normal.fx"
+#include "data/include/light.fx"
 ::Includes::
 
 texture sAlbedo < string renderTarget = "yes"; >;
@@ -10,9 +12,13 @@ float3 sLightDir = float3(0.5, -0.5, 0.5);
 
 ::Variables::
 
-// ::loop(i, 1, 5)
-// float3 lightPosition(:i:) = float3(0, 0, 0);
-// ::end
+::loop(i, 1, ::maxLights::)
+float4 lightPosition(:i:) = float4(-694.71515, 958.76672, 12.25529, 6); // 4th = size
+float4 lightColor(:i:) = float4(3.5, 0, 0, 1); // 4th = pow
+float4 lightDirection(:i:) = float4(0, 1, 0, 1); // 4th = 1 - directional, 0 - point
+float3 lightPhiThetaFalloff(:i:) = float3(3, 0, 1);
+bool lightEnabled(:i:) = false;
+::end
 
 sampler Sampler0 = sampler_state
 {
@@ -51,6 +57,14 @@ struct PSInput
     float3 Normal : TEXCOORD2;
 };
 
+struct Pixel
+{
+    float4 World : COLOR0;
+    float4 Albedo : COLOR1;
+    float4 Depth : COLOR2;
+    float4 Emissive : COLOR3;
+};
+
 PSInput VertexShaderFunction(VSInput VS)
 {
     PSInput PS = (PSInput)0;
@@ -67,14 +81,6 @@ PSInput VertexShaderFunction(VSInput VS)
 
     return PS;
 }
-
-struct Pixel
-{
-    float4 World : COLOR0;
-    float4 Albedo : COLOR1;
-    float4 Depth : COLOR2;
-    float4 Emissive : COLOR3;
-};
 
 Pixel PixelShaderFunction(PSInput PS)
 {
@@ -95,10 +101,42 @@ Pixel PixelShaderFunction(PSInput PS)
     Output.Depth = float4(depth, depth, depth, Output.Albedo.a);
     float4 emmisive = float4(0, 0, 0, Output.Albedo.a > 0.78 ? Output.Albedo.a : 0);
     ::Emmisive::
-    Output.Emissive = emmisive;
 
     float inverseDot = pow(dot(sLightDir, PS.Normal), 2);
     Output.Albedo.rgb *= lerp(1, 0.6, inverseDot * (1-emmisive));
+
+    float3 normalTexel = tex2DNormal(Sampler0, PS.TexCoord);
+    PS.Normal -= normalTexel - 0.5;
+
+    float3 lightColor = (float3)0;
+    
+    float lightDistance;
+    ::loop(i, 1, ::maxLights::)
+    if(lightEnabled(:i:)) {
+        Output.Albedo.rgb = AffectByLight(
+            Output.Albedo.rgb,
+            PS.WorldPos,
+            PS.Normal,
+            lightPosition(:i:).xyz,
+            lightColor(:i:).rgb,
+            lightPosition(:i:).w,
+            lightDirection(:i:).xyz,
+            lightDirection(:i:).w == 1,
+            lightPhiThetaFalloff(:i:).x,
+            lightPhiThetaFalloff(:i:).y,
+            lightPhiThetaFalloff(:i:).z,
+            lightColor
+        );
+
+        lightColor /= 2;
+
+        lightDistance = min(distance(PS.WorldPos, lightPosition(:i:).xyz)/lightPosition(:i:).w, 1);
+        // Output.Albedo.rgb = lerp(Output.Albedo.rgb, pow(Output.Albedo.rgb, lightColor(:i:).a), 1 - lightDistance);
+        emmisive.rgb = lerp(emmisive.rgb, lightColor, 1 - lightDistance);
+    }
+    ::end
+
+    Output.Emissive = emmisive;
 
     return Output;
 }

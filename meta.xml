@@ -11,10 +11,13 @@
     <script src='scripts/godrays.lua' type='client' cache='false'/>
     <script src='scripts/emmisive.lua' type='client' cache='false'/>
     <script src='scripts/daycycle.lua' type='client' cache='false'/>
+    <script src='scripts/lights.lua' type='client' cache='false'/>
     <script src='scripts/main.lua' type='client' cache='false'/>
 
     <file src='data/include/mta-helper.fx'/>
+    <file src='data/include/normal.fx'/>
     <file src='data/include/matrix.fx'/>
+    <file src='data/include/light.fx'/>
     <file src='data/include/noise.fx'/>
     <file src='data/include/pack.fx'/>
     <file src='data/shadow.fx'/>
@@ -34,6 +37,7 @@
     <file src='data/skybox/3.jpg'/>
     <file src='data/skybox/4.jpg'/>
     <file src='data/skybox/5.jpg'/>
+    <file src='data/skybox/6.jpg'/>
 
     <min_mta_version server='1.5.7-9.20744' client='1.5.7-9.20744'/>
 </meta>

@@ -57,6 +57,7 @@ function compileShader(template, source)
     -- ::variable::
     local variables = {
         {'shadowPlanes', #settings.shadowPlanes},
+        {'maxLights', settings.maxLights},
     }
 
     for _,variable in pairs(variables) do
@@ -111,9 +112,7 @@ function compileShader(template, source)
     return template
 end
 
--- print(getTickCount())
--- print(compileShader('data/loops-test.fx'))
-setClipboard(compileShader('data/shadow.fx'))
+setClipboard(compileShader('data/world.fx'))
 
 function createShader(path, vehicleShadows)
     local distance = settings.shadowPlanes[#settings.shadowPlanes]

@@ -1,6 +1,6 @@
 local emmisiveShaders = {}
 local emmisiveTextures = {
-    {'vehiclelightson128', 155, 155, 155, 0.8, {1, 1}},
+    {'vehiclelightson128', 255, 255, 255, 0.8, {1, 1}},
 }
 
 function createEmmisiveShaders()

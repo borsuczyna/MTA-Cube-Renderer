@@ -43,11 +43,21 @@ function renderCubeRenderer()
     dxDrawText('Cube Renderer Alpha @borsuczyna', 0, 0, sx, sy - 2, white, 1.5, 'default-bold', 'center', 'bottom')
 
     dxDrawText('fps: ' .. fps[2], 0, 0, sx, sy - 25, white, 1, 'default-bold', 'center', 'bottom')
+
+    -- debug
+    queueLight({375.16501, -2068.24268, 7.83594}, {855, 0, 0}, 8)
+    queueLight({382.57190, -2065.37402, 7.83594}, {0, 855, 0}, 8, {
+        direction = {math.cos(getTickCount()/400), math.sin(getTickCount()/400), -0.5},
+        theta = 0,
+        phi = 1,
+        falloff = 0.1,
+    })
 end
 
 function updateCubeRenderer()
     updateCamera()
     updateBuffers()
+    updateLights()
 
     fps[1] = fps[1] + 1
 end
