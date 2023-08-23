@@ -1,5 +1,5 @@
 float textureSize = 256.0f;
-float normalPower = 2;
+float normalPower = 5;
 
 float4 tex2DGrayScale(sampler textureSampler, float2 texCoord)
 {

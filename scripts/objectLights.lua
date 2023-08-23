@@ -9,11 +9,11 @@ local lights = {
         phi = 3,
         falloff = 1,
     }, true},
-    [1226] = {20, 6, -1.2, 0, 3.5, 700, 400, 0, 30, {
-        direction = {'toOffset', -2.5, 0, 0},
+    [1226] = {20, 6, -1.3, 0, 3.5, 800, 500, 0, 30, {
+        direction = {'toOffset', -7, 0, 0},
         theta = 0,
-        phi = 3,
-        falloff = 1,
+        phi = 1.2,
+        falloff = 0.4,
     }, true},
     [1294] = {20, 6, -1.3, 0, 4.1, 800, 500, 0, 30, {
         direction = {'toOffset', -7, 0, 0},
@@ -22,14 +22,6 @@ local lights = {
         falloff = 0.4,
     }, true},
 }
-
-function isInTime(start, endt, current) -- should check if end < start check to 24
-    if start < endt then
-        return current >= start
-    else
-        return current >= start or current <= endt
-    end
-end
 
 function updateObjectLights()
     local cx, cy, cz = getCameraMatrix()
@@ -84,11 +76,3 @@ end
 
 addEventHandler('onClientElementStreamIn', root, unbrokeObject)
 addEventHandler('onClientElementStreamOut', root, unbrokeObject)
-
-function getPositionFromElementOffset(element,offX,offY,offZ)
-    local m = getElementMatrix ( element )  -- Get the matrix
-    local x = offX * m[1][1] + offY * m[2][1] + offZ * m[3][1] + m[4][1]  -- Apply transform
-    local y = offX * m[1][2] + offY * m[2][2] + offZ * m[3][2] + m[4][2]
-    local z = offX * m[1][3] + offY * m[2][3] + offZ * m[3][3] + m[4][3]
-    return x, y, z                               -- Return the transformed point
-end

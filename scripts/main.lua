@@ -1,6 +1,6 @@
 local shaders = {}
 local fps = {0, 0}
-local dayCycleTimer = nil
+local timers = {}
 
 setTimer(function()
     fps[2] = fps[1] * 4
@@ -18,7 +18,7 @@ function renderCubeRenderer()
     dxDrawImage(0, 0, sx, sy, shaders.post)
     if settings.godRaysEnabled then dxDrawImage(0, 0, sx, sy, shaders.godrays) end
 
-    if settings.debugRender == 1 then -- draw shadow depth buffers
+    if settings.debugRender == 1 then
         local x, y = 0, 0
         for i = 1, #settings.shadowPlanes do
             local depth = getDepthBuffer(i)
@@ -58,6 +58,10 @@ function updateCubeRenderer()
     updateCamera()
     updateBuffers()
 
+    if settings.vehicleLightsEnabled then
+        updateVehicleLights()
+    end
+
     if settings.objectLightsEnabled then
         updateObjectLights()
     end
@@ -72,7 +76,7 @@ function initCubeRenderer()
 
     initBuffers()
     
-    shaders.main = createShader(nil, true)
+    shaders.main = createShader()
     shaders.main:defaultApply()
     shaders.generic = createShader('data/effects/generic.fx')
     shaders.generic:apply('vehiclegeneric256')
@@ -87,8 +91,8 @@ function initCubeRenderer()
         createReplacedObjects()
     end
 
-    dayCycleTimer = setTimer(updateDayCycle, getMinuteDuration(), 0)
-    dayCycleTimer = setTimer(updateDayCycle, 1000, 1)
+    timers['dayCycle'] = setTimer(updateDayCycle, getMinuteDuration(), 0)
+    setTimer(updateDayCycle, 1000, 1)
     updateDayCycle()
 
     if settings.windShadersEnabled then createWindShaders() end
@@ -109,7 +113,7 @@ function destroyCubeRenderer()
     destroyShaders()
     destroyBuffers()
 
-    if isTimer(dayCycleTimer) then killTimer(dayCycleTimer) end
+    if isTimer(timers['dayCycle']) then killTimer(timers['dayCycle']) end
 end
 
 addEventHandler('onClientResourceStart', resourceRoot, initCubeRenderer)

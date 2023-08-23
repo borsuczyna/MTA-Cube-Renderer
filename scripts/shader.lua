@@ -114,7 +114,7 @@ end
 
 -- setClipboard(compileShader('data/world.fx'))
 
-function createShader(path, vehicleShadows)
+function createShader(path)
     local distance = settings.shadowPlanes[#settings.shadowPlanes]
     local shader = {
         shadows = dxCreateShader(compileShader('data/shadow.fx', path), 0, distance + 50, true, 'all'),
