@@ -19,8 +19,11 @@ function compileShader(template, source)
         'WorldPosition',
         'Includes',
         'Variables',
+        'VertexShader',
         'PixelShader',
         'Emmisive',
+        'VSInput',
+        'PSInput',
     }
 
     if source then
@@ -218,6 +221,12 @@ local _dxSetShaderValue = dxSetShaderValue
 function dxSetShaderValue(shader, name, ...)
     if not isElement(shader) then return end
     return _dxSetShaderValue(shader, name, ...)
+end
+
+local _dxDrawImage = dxDrawImage
+function dxDrawImage(x, y, w, h, texture, ...)
+    if not isElement(texture) then return end
+    return _dxDrawImage(x, y, w, h, texture, ...)
 end
 
 function destroyShaders()

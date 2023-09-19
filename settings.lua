@@ -1,16 +1,17 @@
 settings = {
-    shadowPlanes = {30, 100, 300}, -- max 3!
+    shadowPlanes = {30, 200}, -- max 3!
     vehicleShadowPlane = 50,
     shadowsDirection = Vector3(-0.45, 0.277, -0.34):getNormalized(),
     viewRadius = 150,
 
     sunSize = 500,
+    sunColor = {1, 1, 1},
 
     windStrength = 3,
     windSpeed = 2,
     windDirection = {1, -1},
     windNoiseSize = 0.5,
-    maxLights = 8,
+    maxLights = 14,
     objectsLightsRenderDistance = 300,
     
     godRaysEnabled = true,

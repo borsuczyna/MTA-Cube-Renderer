@@ -1,3 +1,6 @@
+#ifndef MATRIX_FX_INCLUDED
+#define MATRIX_FX_INCLUDED
+#define INVERSE_MATRIX_DEFINED
 float4x4 inverseMatrix(float4x4 input)
 {
      #define minor(a,b,c) determinant(float3x3(input.a, input.b, input.c))
@@ -27,6 +30,26 @@ float4x4 inverseMatrix(float4x4 input)
      return transpose(cofactors) / determinant(input);
 }
 
+#ifndef VIEWPROJECTION_DEFINED
+float4x4 gViewProjection : VIEWPROJECTION;
+#define VIEWPROJECTION_DEFINED
+#endif
+
+float3 GetPosition(float2 UV, float depth)
+{
+	float4 position = 1.0f; 
+ 
+	position.x = UV.x * 2.0f - 1.0f; 
+	position.y = -(UV.y * 2.0f - 1.0f); 
+
+	position.z = depth; 
+
+	position = mul(position, inverseMatrix(gViewProjection)); 
+ 
+	position /= position.w;
+
+	return position.xyz;
+}
 float4x4 makeZRotation( float angleInRadians) 
 {
     float c = cos(angleInRadians);
@@ -114,3 +137,4 @@ float4x4 createImageProjectionMatrix(float2 viewportPos, float2 viewportSize, fl
 
     return sProjection;
 }
+#endif

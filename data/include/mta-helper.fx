@@ -44,7 +44,10 @@ float4x4 gWorldView : WORLDVIEW;
 float4x4 gWorldViewProjection : WORLDVIEWPROJECTION;
 float4x4 gProjectionMainScene : PROJECTION_MAIN_SCENE;
 float4x4 gViewMainScene : VIEW_MAIN_SCENE;
+#ifndef VIEWPROJECTION_DEFINED
 float4x4 gViewProjection : VIEWPROJECTION;
+#define VIEWPROJECTION_DEFINED
+#endif
 float4x4 gViewInverse : VIEWINVERSE;
 float4x4 gWorldInverseTranspose : WORLDINVERSETRANSPOSE;
 float4x4 gViewInverseTranspose : VIEWINVERSETRANSPOSE;
@@ -214,9 +217,9 @@ float4 MTACalcScreenPosition( float3 InPosition )
 // MTACalcWorldPosition
 // - Transform position by current world matix
 //------------------------------------------------------------------------------------------
-float3 MTACalcWorldPosition( float3 InPosition )
+float4 MTACalcWorldPosition(float4 InPosition)
 {
-    return mul(float4(InPosition,1), gWorld).xyz;
+    return mul(InPosition, gWorld);
 }
 
 //------------------------------------------------------------------------------------------

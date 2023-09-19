@@ -8,15 +8,15 @@ local timeCycle = {
         skyboxInterpolationStart = 0,
         skyboxInterpolationEnd = 1,
 
-        sunDirection = {1, 0.05, -0.8},
-        sunColor = {1, 1, 1, 1},
+        sunDirection = {0.3, -0.5, -0.8},
+        sunColor = {1.1, 1, 1, 1},
         sunSize = 500,
         godraysAlpha = 1,
         godRayStartOffset = 0.3,
         godRayLength = 0.7,
 
-        ambientColor = {0.3, 0.3, 0.3},
-        lightColor = {1.05, 0.95, 0.85},
+        ambientColor = {0.4, 0.4, 0.4},
+        lightColor = {1.05, 0.9, 0.75},
         aoColor = {0.3, 0.3, 0.3},
         aoShadowColor = {0.1, 0.1, 0.1},
     },
@@ -115,7 +115,27 @@ local timeCycle = {
         godRayStartOffset = 0,
         godRayLength = 1,
 
-        ambientColor = {0.12, 0.12, 0.22},
+        ambientColor = {0.1, 0.1, 0.22},
+        lightColor = {0.12, 0.12, 0.22},
+        aoColor = {0.3, 0.3, 0.3},
+        aoShadowColor = {0.01, 0.01, 0.03},
+    },
+    [23] = {
+        fogStart = 0.05,
+        fogDistance = 0.5,
+        skyboxTextureA = '7',
+        skyboxTextureB = '7',
+        skyboxInterpolationStart = 0,
+        skyboxInterpolationEnd = 1,
+
+        sunDirection = {1, -0.05, 0.2},
+        sunColor = {0.8, 0.6, 0.4, 0},
+        sunSize = 100,
+        godraysAlpha = 0,
+        godRayStartOffset = 0,
+        godRayLength = 1,
+
+        ambientColor = {0.1, 0.1, 0.22},
         lightColor = {0.12, 0.12, 0.22},
         aoColor = {0.3, 0.3, 0.3},
         aoShadowColor = {0.01, 0.01, 0.03},
@@ -165,6 +185,7 @@ function updateDayCycle()
 
     settings.shadowsDirection = Vector3(unpack(data.sunDirection or {0, 0, 0}))
     settings.sunSize = data.sunSize or 500
+    settings.sunColor = data.sunColor or {255, 255, 255}
 end
 
 function interpolateBetween(a, b, progress)

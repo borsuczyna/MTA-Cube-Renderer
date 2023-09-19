@@ -101,7 +101,7 @@ float4 ProcessShadowMapPS(PSInput PS, sampler2D depthSampler, float2 scrRes) {
     float2 TexProj = PS.TexProj.xy / PS.TexProj.z;
     TexProj += float2(0.0001, 0.0001);
 
-    if (PS.PlaneDist <= 0) return output;
+    if (PS.PlaneDist <= 0 || PS.WorldPos.z <= 0) return output;
 
     float depth = DistToUnit(PS.Depth.x / PS.Depth.y, sClip.x, sClip.y);
     float3 packedDepth = tex2D(depthSampler, TexProj).rgb;

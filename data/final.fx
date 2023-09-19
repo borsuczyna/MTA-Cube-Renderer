@@ -325,6 +325,14 @@ PixelType2 PixelShaderFunctionShadow(PSInput PS)
 
     float3 viewPos = VSPositionFromDepth(PS.TexCoord, sProjectionInverse);
     float3 worldPos = mul(float4(viewPos, 1), gViewInverse).xyz;
+    if(worldPos.z <= 0 && gCameraPosition.z >= 0) {
+        Output.Color = float4(1, 1, 1, 1);
+        return Output;
+    } else if(worldPos.z > 0 && gCameraPosition.z < 0) {
+        Output.Color = float4(1, 1, 1, 1);
+        return Output;
+    }
+
     float3 viewNormal = GetNormalFromDepthProjection(PS.TexCoord.xy, sProjectionInverse);
     float3 worldNormal = mul(viewNormal, (float3x3)gViewInverse).xyz;
     float3 cameraForward = normalize(sCameraForward);
@@ -391,12 +399,16 @@ float GetBayerFromCoordLevel(float2 pixelpos)
 
 PixelType1 PixelShaderFunctionAO(PSInput PS)
 {
-    PixelType1 Output;
+    PixelType1 Output = (PixelType1)0;
 
     float4x4 sProjectionInverse = inverseMatrix(gProjection);
 	
     float3 viewPos = VSPositionFromDepth(PS.TexCoord.xy, sProjectionInverse);
     float4 worldPos = mul(float4(viewPos.xyz, 1), gViewInverse);
+
+    if((worldPos.z <= 0 && gCameraPosition.z >= 0) || (worldPos.z > 0 && gCameraPosition.z < 0)) {
+        return Output;
+    }
 	
     float camDist = distance( gCameraPosition, worldPos.xyz ) / Linearize(1);
 
@@ -467,7 +479,7 @@ float GetBlurWeight(float4 tempKey, float4 centerKey, float surfacealignment)
 
 PixelType1 PixelShaderFunctionBlur1(PSInput PS)
 {
-    PixelType1 Output;
+    PixelType1 Output = (PixelType1)0;
 
     float4 tempsample;
     float4 centerkey , tempkey;

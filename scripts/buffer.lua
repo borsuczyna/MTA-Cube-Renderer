@@ -35,6 +35,7 @@ function initBuffers()
     buffers.skybox = dxCreateRenderTarget(sx, sy, false)
     buffers.screenDepth = dxCreateRenderTarget(sx, sy, true)
     buffers.emmisives = dxCreateRenderTarget(sx, sy, false)
+    buffers.reflect = dxCreateRenderTarget(sx, sy, false)
     if settings.godRaysEnabled then buffers.godrays = dxCreateRenderTarget(sx, sy, true) end
 end
 

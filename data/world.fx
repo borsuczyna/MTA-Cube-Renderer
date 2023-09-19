@@ -8,7 +8,8 @@ texture sAlbedo < string renderTarget = "yes"; >;
 texture sDepth < string renderTarget = "yes"; >;
 texture sEmmisives < string renderTarget = "yes"; >;
 
-float3 sLightDir = float3(0.5, -0.5, 0.5);
+float3 sLightDir = float3(0.5, 0.5, -0.5);
+float3 sLightColor = float3(1, 0, 0);
 
 ::Variables::
 
@@ -42,19 +43,21 @@ sampler AlbedoSampler = sampler_state
 
 struct VSInput
 {
-    float3 Position : POSITION0;
+    float4 Position : POSITION;
     float4 Diffuse : COLOR0;
     float2 TexCoord : TEXCOORD0;
     float3 Normal : NORMAL0;
+    ::VSInput::
 };
 
 struct PSInput
 {
-    float4 Position : POSITION0;
+    float4 Position : POSITION;
     float4 Diffuse : COLOR0;
     float2 TexCoord : TEXCOORD0;
-    float3 WorldPos : TEXCOORD1;
+    float4 WorldPos : TEXCOORD1;
     float3 Normal : TEXCOORD2;
+    ::PSInput::
 };
 
 struct Pixel
@@ -69,15 +72,18 @@ PSInput VertexShaderFunction(VSInput VS)
 {
     PSInput PS = (PSInput)0;
 
-    float4 worldPos = mul(float4(VS.Position,1), gWorld);
+    float4 worldPos = mul(VS.Position, gWorld);
     ::WorldPosition::
     float4 worldPosView = mul(worldPos, gView);
     PS.Position = mul(worldPosView, gProjection);
 
     PS.TexCoord = VS.TexCoord;
     PS.Diffuse = MTACalcGTABuildingDiffuse(VS.Diffuse);
-    PS.WorldPos = worldPos.xyz;
+    PS.WorldPos = worldPos;
     PS.Normal = mul(VS.Normal, (float3x3)gWorld);
+    MTAFixUpNormal(PS.Normal);
+
+    ::VertexShader::
 
     return PS;
 }
@@ -97,7 +103,7 @@ Pixel PixelShaderFunction(PSInput PS)
     if(albedo.a == 0) // it's sky, multiply alpha
         Output.Albedo.a *= 3;
 
-    float depth = distance(gCameraPosition, PS.WorldPos) / 1000;
+    float depth = distance(gCameraPosition, PS.WorldPos.xyz) / 1000;
     Output.Depth = float4(depth, depth, depth, Output.Albedo.a);
     float4 emmisive = float4(0, 0, 0, Output.Albedo.a > 0.78 ? Output.Albedo.a : 0);
     ::Emmisive::
@@ -116,7 +122,7 @@ Pixel PixelShaderFunction(PSInput PS)
     if(lightEnabled(:i:)) {
         Output.Albedo.rgb = AffectByLight(
             Output.Albedo.rgb,
-            PS.WorldPos,
+            PS.WorldPos.xyz,
             PS.Normal,
             lightPosition(:i:).xyz,
             lightColor(:i:).rgb,
@@ -129,7 +135,7 @@ Pixel PixelShaderFunction(PSInput PS)
             lightColors
         );
 
-        lightDistance = min(distance(PS.WorldPos, lightPosition(:i:).xyz)/lightPosition(:i:).w, 1);
+        lightDistance = min(distance(PS.WorldPos.xyz, lightPosition(:i:).xyz)/lightPosition(:i:).w, 1);
         // Output.Albedo.rgb = lerp(Output.Albedo.rgb, pow(Output.Albedo.rgb, lightColor(:i:).a), 1 - lightDistance);
         // emmisive.rgb = lerp(emmisive.rgb, lightColor, 1 - lightDistance);
     }

@@ -10,6 +10,8 @@
     <script src='scripts/wind.lua' type='client' cache='false'/>
     <script src='scripts/godrays.lua' type='client' cache='false'/>
     <script src='scripts/emmisive.lua' type='client' cache='false'/>
+    <script src='scripts/reflective.lua' type='client' cache='false'/>
+    <script src='scripts/water.lua' type='client' cache='false'/>
     <script src='scripts/daycycle.lua' type='client' cache='false'/>
     <script src='scripts/lights.lua' type='client' cache='false'/>
     <script src='scripts/objects.lua' type='client' cache='false'/>
@@ -25,8 +27,11 @@
     <file src='data/include/light.fx'/>
     <file src='data/include/noise.fx'/>
     <file src='data/include/pack.fx'/>
+    <file src='data/include/reflect.fx'/>
+    <file src='data/include/depth.fx'/>
     <file src='data/shadow.fx'/>
     <file src='data/world.fx'/>
+    <file src='data/water.fx'/>
     <file src='data/final.fx'/>
     <file src='data/post.fx'/>
     <file src='data/godrays.fx'/>
@@ -34,8 +39,11 @@
     <file src='data/loops-test.fx'/>
 
     <file src='data/effects/wind.fx'/>
+    <file src='data/effects/texcoord-emmisive.fx'/>
     <file src='data/effects/emmisive.fx'/>
     <file src='data/effects/generic.fx'/>
+    <file src='data/effects/reflective.fx'/>
+    <file src='data/effects/water.fx'/>
 
     <file src='data/skybox/1.jpg'/>
     <file src='data/skybox/2.jpg'/>
@@ -43,6 +51,10 @@
     <file src='data/skybox/4.jpg'/>
     <file src='data/skybox/5.jpg'/>
     <file src='data/skybox/6.jpg'/>
+    <file src='data/skybox/7.jpg'/>
+
+    <file src='data/water/foam.png'/>
+    <file src='data/water/normal.png'/>
 
     <min_mta_version server='1.5.7-9.20744' client='1.5.7-9.20744'/>
 </meta>

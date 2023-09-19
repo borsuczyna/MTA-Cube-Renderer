@@ -45,6 +45,7 @@ local windTextures = {
     {'wind', 'sm_josh_leaf', 0, 13},
     {'wind', 'sm_josh_bark', 0, 13},
     {'wind', 'sw_flag01', 1.5, -2},
+    {'wind', 'gen_log', 0, 20, false, true},
 
     -- {'wind', 'txgrass1_1', 0, 10, true},
     -- {'grass', 'txgrass0_1', 0, 10, true},

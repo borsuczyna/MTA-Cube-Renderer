@@ -4,7 +4,7 @@ float sEmmisivePower = 1.0f;
 float2 sEmmisivePow = float2(1, 1);
 ::end
 
-::PixelShader(float3 color)
+::PixelShader(float3 texel)
 texel.rgb *= sEmisiveColor;
 texel.rgb = pow(texel.rgb/sEmmisivePow.x, sEmmisivePow.y);
 ::end

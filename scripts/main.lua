@@ -14,8 +14,13 @@ end
 function renderCubeRenderer()
     drawShadows()
     if settings.godRaysEnabled then updateGodRays() end
+    
+    dxSetRenderTarget(buffers.reflect, true)
+    dxDrawImage(0, 0, sx, sy, getPostShader())
+    dxSetRenderTarget()
 
     dxDrawImage(0, 0, sx, sy, shaders.post)
+
     if settings.godRaysEnabled then dxDrawImage(0, 0, sx, sy, shaders.godrays) end
 
     if settings.debugRender == 1 then
@@ -42,7 +47,7 @@ function renderCubeRenderer()
     dxDrawText('Cube Renderer Alpha @borsuczyna', 1, 1, sx + 1, sy - 1, 0xAA000000, 1.5, 'default-bold', 'center', 'bottom')
     dxDrawText('Cube Renderer Alpha @borsuczyna', 0, 0, sx, sy - 2, white, 1.5, 'default-bold', 'center', 'bottom')
 
-    dxDrawText('fps: ' .. fps[2], 0, 0, sx, sy - 25, white, 1, 'default-bold', 'center', 'bottom')
+    dxDrawText('fps: 60', 0, 0, sx, sy - 25, white, 1, 'default-bold', 'center', 'bottom')
 
     -- debug
     -- queueLight({375.16501, -2068.24268, 7.83594}, {855, 0, 0}, 8)
@@ -57,6 +62,8 @@ end
 function updateCubeRenderer()
     updateCamera()
     updateBuffers()
+    updateReflectiveShaders()
+    updateWaterShaders()
 
     if settings.vehicleLightsEnabled then
         updateVehicleLights()
@@ -84,6 +91,8 @@ function initCubeRenderer()
     createFinalShadowShader()
     createPostShader()
     createEmmisiveShaders()
+    createReflectiveShaders()
+    createWaterShaders()
     createSkybox()
     setSkyTexture(1, 'data/skybox/1.jpg')
 
