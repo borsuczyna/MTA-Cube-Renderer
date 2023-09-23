@@ -97,7 +97,7 @@ worldPos.xy += fWindDirection * fWindStrength * treeHeight * noise + (isTreeLog 
 ```
 
 # Support server:
-https://discord.gg/todo
+https://discord.gg/5djHMPfGGR
 
 # Preview
 ![](https://borsuczyna.github.io/2.png)
