@@ -1,6 +1,7 @@
 local shaders = {}
 local fps = {0, 0}
 local timers = {}
+local loaded = false
 
 setTimer(function()
     fps[2] = fps[1] * 4
@@ -12,6 +13,8 @@ function getMainShader()
 end
 
 function renderCubeRenderer()
+    if not loaded then return end
+
     drawShadows()
     if settings.godRaysEnabled then updateGodRays() end
     
@@ -47,8 +50,6 @@ function renderCubeRenderer()
     dxDrawText('Cube Renderer Alpha @borsuczyna', 1, 1, sx + 1, sy - 1, 0xAA000000, 1.5, 'default-bold', 'center', 'bottom')
     dxDrawText('Cube Renderer Alpha @borsuczyna', 0, 0, sx, sy - 2, white, 1.5, 'default-bold', 'center', 'bottom')
 
-    dxDrawText('fps: 60', 0, 0, sx, sy - 25, white, 1, 'default-bold', 'center', 'bottom')
-
     -- debug
     -- queueLight({375.16501, -2068.24268, 7.83594}, {855, 0, 0}, 8)
     -- queueLight({382.57190, -2065.37402, 7.83594}, {0, 855, 0}, 8, {
@@ -60,6 +61,8 @@ function renderCubeRenderer()
 end
 
 function updateCubeRenderer()
+    if not loaded then return end
+
     updateCamera()
     updateBuffers()
     updateReflectiveShaders()
@@ -79,6 +82,10 @@ function updateCubeRenderer()
 end
 
 function initCubeRenderer()
+    if loaded then return end
+
+    loaded = not loaded
+
     destroyCubeRenderer()
 
     initBuffers()
@@ -115,6 +122,10 @@ function initCubeRenderer()
 end
 
 function destroyCubeRenderer()
+    if not loaded then return end
+
+    loaded = not loaded
+
     removeEventHandler('onClientPreRender', root, updateCubeRenderer)
     removeEventHandler('onClientPreRender', root, updateShadows)
     removeEventHandler('onClientHUDRender', root, renderCubeRenderer)
@@ -127,10 +138,10 @@ end
 
 addEventHandler('onClientResourceStart', resourceRoot, initCubeRenderer)
 
-addCommandHandler('elo', function()
-    destroyCubeRenderer()
-end)
-
-addCommandHandler('elo2', function()
-    initCubeRenderer()
+addCommandHandler('switchCube', function()
+    if loaded then
+        destroyCubeRenderer()
+    else
+        initCubeRenderer()
+    end
 end)
